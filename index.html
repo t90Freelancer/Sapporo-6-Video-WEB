@@ -27,5 +27,21 @@
         </a-entity>
     </a-scene>
 </body>
+<script>
+    window.addEventListener(" DOMContentLoaded", () => {
+        const video0 = document.querySelector("#video0");
+        const video1 = document.querySelector("#video1");
+
+        // Ép browser load video
+        video0.load();
+        video1.load();
+
+        // Tùy chọn: Nếu bạn muốn bắt đầu play (tắt tiếng để autoplay hoạt động trên mobile)
+        video0.muted = true;
+        video1.muted = true;
+        video0.play().catch(() => { });
+        video1.play().catch(() => { });
+    });
+</script>
 
 </html>
