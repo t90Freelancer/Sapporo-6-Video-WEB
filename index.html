@@ -318,6 +318,7 @@
     <a-scene mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/HaiquangPham14/TestARGame2@main/targets.mind"
         color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
+
         <a-assets>
             <video id="video0" src="https://cdn.jsdelivr.net/gh/HaiquangPham14/TestARGame2@main/Sapporo1.mp4"
                 preload="auto" crossorigin="anonymous" webkit-playsinline playsinline loop></video>
@@ -335,43 +336,97 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <!-- 6 targets tương ứng với 6 video -->
+        <!-- Target 0 -->
         <a-entity id="target0" mindar-image-target="targetIndex: 0">
-            <a-video id="video-plane0" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane0" src="#video0" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text0" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
 
+        <!-- Target 1 -->
         <a-entity id="target1" mindar-image-target="targetIndex: 1">
-            <a-video id="video-plane1" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane1" src="#video1" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text1" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
 
+        <!-- Target 2 -->
         <a-entity id="target2" mindar-image-target="targetIndex: 2">
-            <a-video id="video-plane2" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane2" src="#video2" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text2" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
 
+        <!-- Target 3 -->
         <a-entity id="target3" mindar-image-target="targetIndex: 3">
-            <a-video id="video-plane3" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane3" src="#video3" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text3" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
 
+        <!-- Target 4 -->
         <a-entity id="target4" mindar-image-target="targetIndex: 4">
-            <a-video id="video-plane4" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane4" src="#video4" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text4" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
 
+        <!-- Target 5 -->
         <a-entity id="target5" mindar-image-target="targetIndex: 5">
-            <a-video id="video-plane5" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
+            <a-video id="video-plane5" src="#video5" width="1" height="0.5625" position="0 0 0" rotation="0 0 0"
                 visible="false"></a-video>
-            <div class="tap-to-play">Chạm để phát video</div>
+            <a-text id="text5" value="Chạm để phát video" position="0 -0.4 0" align="center" color="#fff"
+                visible="true"></a-text>
         </a-entity>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const numTargets = 6;
+                for (let i = 0; i < numTargets; i++) {
+                    const target = document.querySelector(`#target${i}`);
+                    const videoPlane = document.querySelector(`#video-plane${i}`);
+                    const videoEl = document.querySelector(`#video${i}`);
+                    const text = document.querySelector(`#text${i}`);
+
+                    // Khi target được tìm thấy
+                    target.addEventListener("targetFound", () => {
+                        videoPlane.setAttribute("visible", "true");
+                        text.setAttribute("visible", "true"); // Show text để người dùng biết chạm
+                        // Tạm thời không tự play video, chờ người dùng chạm
+                        videoEl.pause();
+                        videoEl.currentTime = 0;
+                    });
+
+                    // Khi target mất
+                    target.addEventListener("targetLost", () => {
+                        videoPlane.setAttribute("visible", "false");
+                        text.setAttribute("visible", "true"); // Có thể giữ hiện text hoặc ẩn tùy bạn
+                        videoEl.pause();
+                        videoEl.currentTime = 0;
+                    });
+
+                    // Bắt sự kiện chạm vào video để play/pause
+                    videoPlane.addEventListener("click", () => {
+                        if (videoEl.paused) {
+                            videoEl.play();
+                            text.setAttribute("visible", "false"); // ẩn text khi video chạy
+                        } else {
+                            videoEl.pause();
+                            text.setAttribute("visible", "true");
+                        }
+                    });
+
+                }
+            });
+        </script>
+
     </a-scene>
+
 
     <video id="real-camera-video" autoplay playsinline class="hidden"></video>
     <canvas id="screenshot-canvas" class="hidden"></canvas>
