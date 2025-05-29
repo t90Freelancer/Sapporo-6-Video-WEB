@@ -37,55 +37,56 @@
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0">
-            <a-video src="#video0" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+            <a-video src="#video0" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 1">
-                <a-video src="#video1" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+        <a-entity mindar-image-target="targetIndex: 1">
+            <a-video src="#video1" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 2">
-                    <a-video src="#video2" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+        <a-entity mindar-image-target="targetIndex: 2">
+            <a-video src="#video2" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 3">
-                        <a-video src="#video3" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+        <a-entity mindar-image-target="targetIndex: 3">
+            <a-video src="#video3" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 4">
-                            <a-video src="#video4" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+        <a-entity mindar-image-target="targetIndex: 4">
+            <a-video src="#video4" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 5">
-                                <a-video src="#video5" width="1" height="0.5625" position="0 -0.25 0" "></a-video>
+        <a-entity mindar-image-target="targetIndex: 5">
+            <a-video src="#video5" width="1" height="0.5625" position="0 -0.25 0"></a-video>
         </a-entity>
-        </a-entity>
+
     </a-scene>
 
     <script>
-        window.addEventListener(" DOMContentLoaded", () => {
-            const video0 = document.querySelector("#video0");
-            const video1 = document.querySelector("#video1");
+        window.addEventListener("DOMContentLoaded", () => {
             const loadingScreen = document.getElementById("loading-screen");
 
+            // Danh sách video IDs
+            const videoIds = ["video0", "video1", "video2", "video3", "video4", "video5"];
+            const videos = videoIds.map(id => document.getElementById(id));
             let videosReady = 0;
 
             const onVideoReady = () => {
                 videosReady++;
-                if (videosReady === 2) {
+                if (videosReady === videos.length) {
                     loadingScreen.style.display = "none";
-                    video0.muted = true;
-                    video1.muted = true;
-                    video0.play().catch(() => { });
-                    video1.play().catch(() => { });
+                    videos.forEach(video => {
+                        video.muted = true;
+                        video.play().catch(() => { });
+                    });
                 }
             };
 
-            video0.load();
-            video1.load();
-
-            video0.addEventListener('canplaythrough', onVideoReady);
-            video1.addEventListener('canplaythrough', onVideoReady);
+            // Load từng video và gắn listener
+            videos.forEach(video => {
+                video.load();
+                video.addEventListener('canplaythrough', onVideoReady);
+            });
         });
     </script>
 </body>
