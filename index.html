@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,9 +8,17 @@
 </head>
 
 <body>
+    <!-- Loading screen -->
+    <div id="loading-screen"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: black; color: white; display: flex; justify-content: center; align-items: center; z-index: 9999;">
+        <h1>Đang tải nội dung...</h1>
+    </div>
+
     <a-scene mindar-image="imageTargetSrc: https://t90freelancer.github.io/Sapporo-6-Video-WEB/targets.mind;"
         color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
         device-orientation-permission-ui="enabled: false">
+
         <a-assets>
             <video id="video0" src="https://t90freelancer.github.io/Sapporo-6-Video-WEB/Sapporo1.mp4" preload="auto"
                 crossorigin="anonymous" webkit-playsinline playsinline loop></video>
@@ -20,40 +29,47 @@
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0">
-
-            <a-image src="https://t90freelancer.github.io/Sapporo-6-Video-WEB/Img1.jpg" <!-- link ảnh -->
-                width="1.2" height="0.7"
-                position="0 -0.25 -0.01" <!-- Đặt ảnh phía sau video -->
-                transparent="true">
+            <a-image src="https://t90freelancer.github.io/Sapporo-6-Video-WEB/Img1.jpg" width="1.2" height="0.7"
+                position="0 -0.25 -0.01" transparent="true">
             </a-image>
-            <a-video src="#video0" width="1" height="0.5625" position="0 -0.25 0" scale="0.05 0.05 0.05""></a-video>
+            <a-video src="#video0" width="1" height="0.5625" position="0 -0.25 0" scale="0.05 0.05 0.05"></a-video>
         </a-entity>
 
-        <a-entity mindar-image-target=" targetIndex: 1">
-                <a-image src="https://t90freelancer.github.io/Sapporo-6-Video-WEB/Img2.jpg" <!-- link ảnh -->
-                    width="1.2" height="0.7"
-                    position="0 -0.25 -0.01" <!-- Đặt ảnh phía sau video -->
-                    transparent="true">
-                </a-image>
-                <a-video src="#video1" width="1" height="0.5625" position="0 -0.25 0" scale="0.05 0.05 0.05""></a-video>
+        <a-entity mindar-image-target="targetIndex: 1">
+            <a-image src="https://t90freelancer.github.io/Sapporo-6-Video-WEB/Img2.jpg" width="1.2" height="0.7"
+                position="0 -0.25 -0.01" transparent="true">
+            </a-image>
+            <a-video src="#video1" width="1" height="0.5625" position="0 -0.25 0" scale="0.05 0.05 0.05"></a-video>
         </a-entity>
+
     </a-scene>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const video0 = document.querySelector("#video0");
+            const video1 = document.querySelector("#video1");
+            const loadingScreen = document.getElementById("loading-screen");
+
+            let videosReady = 0;
+
+            const onVideoReady = () => {
+                videosReady++;
+                if (videosReady === 2) {
+                    loadingScreen.style.display = "none";
+                    video0.muted = true;
+                    video1.muted = true;
+                    video0.play().catch(() => { });
+                    video1.play().catch(() => { });
+                }
+            };
+
+            video0.load();
+            video1.load();
+
+            video0.addEventListener('canplaythrough', onVideoReady);
+            video1.addEventListener('canplaythrough', onVideoReady);
+        });
+    </script>
 </body>
-<script>
-    window.addEventListener(" DOMContentLoaded", () => {
-        const video0 = document.querySelector("#video0");
-        const video1 = document.querySelector("#video1");
-
-        // Ép browser load video
-        video0.load();
-        video1.load();
-
-        // Tùy chọn: Nếu bạn muốn bắt đầu play (tắt tiếng để autoplay hoạt động trên mobile)
-        video0.muted = true;
-        video1.muted = true;
-        video0.play().catch(() => { });
-        video1.play().catch(() => { });
-    });
-</script>
 
 </html>
